@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diseño con Top-Bar y Side-Bar</title>
+    <link rel="stylesheet" href="app.js">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/system.css">
+    <link rel="icon" href="/resources/favicon.svg" type="image/svg+xml">
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
+    
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="empresa">
+        <img class="logo" src="resources/logo.png" alt="Logo">
+        <h1>Sistema de Juegos</h1>
+    </div>
+    <div class="user-info">
+        <img class="user-photo" src="resources/malenia.png" alt="Foto de usuario" onclick="toggleMenu()">
+    </div>
+    <div class="sub-menu-wrap" id="subMenu">
+        <div class="sub-menu">
+            <div class="user-info">
+                <img class="sub-photo" src="resources/malenia.png" alt="Foto de usuario" >
+                <h2 id="welcomeMessage"></h2>
+            </div>
+            <hr>
+            <a href="login.html" class="sub-menu-link" id="logout">
+              <img src="resources/logout.png" alt="">
+              <p>Logout</p>
+              <span>></span>
+            </a>
+        </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="side-bar">
+        <ul>
+          <li>
+            <a href="index.html">
+                <ion-icon name="keypad"></ion-icon>
+                Inicio
+              </a>
+          </li>
+          <li>
+              <a href="juegos.html">
+                <ion-icon name="logo-game-controller-a"></ion-icon>
+                Juegos
+              </a>
+          </li>
+          <li>
+              <a href="dev.html">
+                <ion-icon name="code"></ion-icon>
+                Desarrolladora
+              </a>
+          </li>
+          <li>
+              <a href="user.html">
+                <ion-icon name="desktop"></ion-icon>
+                Control Usuarios
+              </a>
+          </li>
+        </ul>
+    </div>
+
+    <div class="content">
+      <div class="top-content">
+
+        <div class="add-game">
+          <button type="button" class="addGbtn" data-toggle="modal" data-target="#gameModal">+ New Game</button>
+        </div>
+      </div>
+
+      <table id="tableJuegos" class=" display table table-striped table-bordered "cellspacing="0" >
+        <thead class="theader">
+          <tr class="header">
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Lanzamiento</th>
+            <th scope="col">Plataforma</th>
+            <th scope="col">Desarrolladora</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="juegos-tbody">
+ 
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">New Game</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="game" id="gameForm" action="" method="POST">
+            <div class="form-group">
+              <label for="gameName">Juego</label>
+              <input class="form-control" type="text" id="gameName" placeholder="Nombre del juego" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="launchDate">Lanzamiento</label>
+              <input class="form-control" type="date" id="releaseDate" required>
+            </div>
+          
+            <div class="form-group">
+              <label for="platform">Plataforma</label>
+              <input class="form-control" type="text" id="platform" placeholder="Plataforma" required>
+            </div>
+          
+            <div class="form-group">
+              <label for="dev">Desarrolladora</label>
+              <select id="dev-select"  class="form-control" required>
+                <!-- Las opciones se cargarán aquí -->
+              </select>
+            </div>
+          
+          </form>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="submit" form="gameForm" class="btn btn-primary" id="saveChangesBtn">Guardar cambios</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" id="editmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Game</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="game" id="editGameForm">
+                    <div class="form-group">
+                        <label for="gameName">Juego</label>
+                        <input class="form-control" type="text" id="gameNameEdit" placeholder="Nombre del juego" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="launchDate">Lanzamiento</label>
+                        <input class=" form-control" type="date" id="launchDate" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="platform">Plataforma</label>
+                        <input class="form-control" type="text" id="platformEdit" placeholder="Plataforma" required>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="dev">Desarrolladora</label>
+                        <select id="dev-select-edit" name="dev" class="form-control" required></select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveEditBtn">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<script>
+    let subMenu = document.getElementById("subMenu");
+
+    function toggleMenu(){
+      subMenu.classList.toggle("open-menu");
+    }
+
+</script>
+
+
+<script src="app.js"></script> <!-- Asegúrate de que esto vaya aquí -->
+</body>
+</html>
